@@ -38,14 +38,41 @@ router.use(function(req, res){
     res.send(app.locals.test + '');
 });
 
-app.get("/api/favorite/:userId", function(req, res, next){
-	sql = 'SELECT * FROM completados';
-    db.query(sql, (err, result)=>{
+app.post("/api/buscar/", function(req, res, next){
+    let token = '2f8f64ebec31084a75213053ec72070d673b74e8';
+    let numero = req.body.numero;
+    let tipo = req.body.tipo;
+    let sql = "SELECT id FROM tokens WHERE token = ?";
+    console.log(tipo);
+
+    db.query(sql, [token], (err, result)=>{
         if(err) throw err;
         if(result == ''){
-            res.json({"nombre":"", "match":"", "subida":"", "update":""});
+            res.json([{"id": "", "nombre":"", "descripcion":"", "matchs":"", "subida":"", "modificacion":"", "tipo":""}]);
         }else{
-            res.json(result);
+            if(numero == 1){
+                sql2 = "SELECT id, nombre, descripcion, matchs, subida, modificacion, tipo FROM favoritos WHERE nombre LIKE ? ORDER BY id DESC";
+                db.query(sql2, ["%" + req.body.palabra + "%"], (err, result)=>{
+                    if(err) throw err;
+                    if(result == ''){
+                        res.json([{"id": "", "nombre":"", "descripcion":"", "matchs":"", "subida":"", "modificacion":"", "tipo":""}]);
+                    }else{
+                        res.json(result);
+                    }
+                });
+            }else if(numero == 2){
+                sql2 = "SELECT id, nombre, descripcion, matchs, subida, modificacion, tipo FROM segmentos WHERE tipo = ? AND nombre LIKE ? ORDER BY id ASC";
+                db.query(sql2, [tipo, "%" + req.body.palabra + "%"], (err, result)=>{
+                    if(err) throw err;
+                    if(result == ''){
+                        res.json([{"id": "", "nombre":"", "descripcion":"", "matchs":"", "subida":"", "modificacion":"", "tipo":""}]);
+                    }else{
+                        res.json(result);
+                    }
+                });
+            }else{
+                res.json([{"id": "", "nombre":"", "descripcion":"", "matchs":"", "subida":"", "modificacion":"", "tipo":""}]);
+            }
         }
     });
 });
