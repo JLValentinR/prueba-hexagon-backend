@@ -63,7 +63,7 @@ app.post("/api/buscar/", function(req, res, next){
                 if(req.body.orden == 'id'){
                     sql2 = "SELECT id, nombre, descripcion, matchs, subida, modificacion, tipo FROM segmentos WHERE tipo = ? AND nombre LIKE ? ORDER BY id DESC";
                 }else if(req.body.orden == 'snombre'){
-                    sql2 = "SELECT id, nombre, descripcion, matchs, subida, modificacion, tipo FROM segmentos WHERE tipo = ? AND nombre LIKE ? ORDER BY nombre DESC";
+                    sql2 = "SELECT id, nombre, descripcion, matchs, subida, modificacion, tipo FROM segmentos WHERE tipo = ? AND nombre LIKE ? ORDER BY nombre ASC";
                 }else if(req.body.orden == 'smatch'){
                     sql2 = "SELECT id, nombre, descripcion, matchs, subida, modificacion, tipo FROM segmentos WHERE tipo = ? AND nombre LIKE ? ORDER BY matchs DESC";
                 }else if(req.body.orden == 'ssubida'){
